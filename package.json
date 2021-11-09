@@ -1,0 +1,27 @@
+{
+  "name": "employee-manager",
+  "version": "1.0.0",
+  "description": "a simple app used to manage your employees",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "inquirer": "^8.2.0",
+    "mysql2": "^2.3.3-rc.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.14"
+  },
+  "scripts": {
+    "test": "echo \\\"Error: no test specified\\\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kay0ss/employee-management.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kay0ss/employee-management/issues"
+  },
+  "homepage": "https://github.com/Kay0ss/employee-management#readme"
+}
