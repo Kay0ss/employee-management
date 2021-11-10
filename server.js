@@ -94,8 +94,24 @@ addEmployee = () => {
         })
     })
 
-    getRolesFromDB
-    .then( roleTitle => {
+
+        const getManagersFromDB = new Promise( (resolve, reject) => {
+            db.query(`SELECT first_name, last_name, id FROM employee WHERE manager_id is null`, (err, res) => {
+                if (err) return res.status(400).console.log(err)
+
+                let managers = res.map(function(manager){
+                    return manager.first_name + " " + manager.last_name;
+                })
+                if (managers) {
+                    resolve(managers)
+                } else {
+                    reject("something went wrong");
+                }
+            })
+        })
+
+        Promise.all([getRolesFromDB, getManagersFromDB])
+        .then((values) => {
         const addEmployeeQuestions = [
             {
                 type: "input",
@@ -110,15 +126,27 @@ addEmployee = () => {
             {
                 type: "list",
                 message: "What is the employees role?",
-                choices: roleTitle
+                choices: values[0]
             },
+            {
+                type: "list",
+                message: "Who is the employee's manager?",
+                name: "employeeManager",
+                choices: values[1]
+            }
         ]
 
         inquirer
             .prompt(addEmployeeQuestions)
 
             .then(response => {
-                console.log(response);
+                console.log(response.firstName);
+
+
+                db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [response.first_name, response.last_name, response.employeeRole, response.employeeManager], (err, results) => {
+                    if (err) return res.status(400).json(err);
+                    res.json("It was a success!");
+                })
             })
     })
     .catch( err => console.log(err))
