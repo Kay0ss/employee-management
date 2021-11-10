@@ -23,6 +23,18 @@ const initialQuestion = [
     }
 ]
 
+const addEmployeeQuestions = [
+
+]
+
+const addRoleQuestions = [
+
+]
+
+const addDepartmentQuestions = [
+
+]
+
 
 // Question sets
 start = () => {
@@ -31,25 +43,25 @@ start = () => {
 
         .then(response => {
             //Routes user to next function based on answer
-            if (response === "View All Employees"){
+            if (response.initQuestion === "View All Employees"){
                 viewAllEmployees();
             }
-            else if (response === "Add Employee"){
+            else if (response.initQuestion === "Add Employee"){
                 addEmployee();
             }
-            else if (response === "Update Employee Role"){
+            else if (response.initQuestion === "Update Employee Role"){
                 updateEmployeeRole();
             }
-            else if (response === "View All Roles"){
+            else if (response.initQuestion === "View All Roles"){
                 viewAllRoles();
             }
-            else if (response === "Add Role"){
+            else if (response.initQuestion === "Add Role"){
                 addRole();
             }
-            else if (response === "View All Departments"){
+            else if (response.initQuestion === "View All Departments"){
                 viewAllDepartments();
             }
-            else if (response === "Add Department"){
+            else if (response.initQuestion === "Add Department"){
                 addDepartment();
             }
             else return;
@@ -58,9 +70,13 @@ start = () => {
 
 // Shows all employees in the db
 viewAllEmployees = () => {
+    db.query(`SELECT * FROM employee`, (err, res) => {
+        if (err) return res.status(400).console.log(err)
+        console.table(res);
+        start();
+    })
 
-
-}
+};
 
 // Adds an employees in the db
 addEmployee = () => {
@@ -73,7 +89,11 @@ updateEmployeeRole = () => {
 
 //shows all roles
 viewAllRoles = () => {
-
+    db.query(`SELECT * FROM role`, (err, res) => {
+        if (err) return res.status(400).console.log(err)
+        console.table(res);
+        start()
+    })
 }
 
 //adds a role to the db
@@ -83,13 +103,19 @@ addRole = () => {
 
 // shows all departments in the db
 viewAllDepartments = () => {
-
-}
+    db.query(`SELECT * FROM department`, (err, res) => {
+        if (err) return res.status(400).console.log(err)
+        console.table(res);
+        start()
+    })
+};
 
 //ads department to the db
 addDepartment = () => {
 
 }
+
+start();
 
 
 
