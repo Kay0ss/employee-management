@@ -58,7 +58,9 @@ start = () => {
 // Shows all employees in the db
 viewAllEmployees = () => {
   db.query(`SELECT * FROM employee`, (err, res) => {
-    // if (err) return res.status(400).console.log(err)
+    if (err) {
+      return res.status(400).console.log(err);
+    }
     console.table(res);
     start();
   });
@@ -68,8 +70,6 @@ viewAllEmployees = () => {
 addEmployee = () => {
   const getRolesFromDB = new Promise((resolve, reject) => {
     db.query(`SELECT title, id FROM role`, (err, res) => {
-      // if (err) return res.status(400).console.log(err)
-
       if (res) {
         resolve(res);
       } else {
@@ -82,8 +82,6 @@ addEmployee = () => {
     db.query(
       `SELECT first_name, last_name, id FROM employee WHERE manager_id is null`,
       (err, res) => {
-        // if (err) return res.status(400).console.log(err)
-
         if (res) {
           resolve(res);
         } else {
@@ -152,8 +150,9 @@ addEmployee = () => {
             `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`,
             [response.firstName, response.lastName, thisRoleId, thisManagerId],
             (err, results) => {
-              // if (err) return res.status(400).json(err);
-
+              if (err) {
+                return console.log(err);
+              }
               console.log(
                 "Added " +
                   response.firstName +
@@ -173,8 +172,6 @@ addEmployee = () => {
 updateEmployeeRole = () => {
   const getEmployeesFromDB = new Promise((resolve, reject) => {
     db.query(`SELECT first_name, last_name, id FROM employee`, (err, res) => {
-      // if (err) return res.status(400).console.log(err)
-
       if (res) {
         resolve(res);
       } else {
@@ -186,8 +183,6 @@ updateEmployeeRole = () => {
   // Creates a promise for querying the database for current roles
   const getRolesFromDB = new Promise((resolve, reject) => {
     db.query(`SELECT title, id FROM role`, (err, res) => {
-      // if (err) return res.status(400).console.log(err)
-
       if (res) {
         resolve(res);
       } else {
@@ -253,8 +248,9 @@ updateEmployeeRole = () => {
           `UPDATE employee SET role_id = (?) WHERE id= (?)`,
           [thisRoleId, thisEmployeeId],
           (err, results) => {
-            // if (err) return res.status(400).json(err);
-
+            if (err) {
+              return console.log(err);
+            }
             console.log("Updated " + chosenEmployee + " in the database.");
 
             // Calls the start function
@@ -267,11 +263,16 @@ updateEmployeeRole = () => {
 
 //shows all roles
 viewAllRoles = () => {
-    db.query(`SELECT title, role.id AS role_id, department.name AS department, salary FROM role JOIN department ON role.department_id = department.id`, (err, res) => {
-    // if (err) return res.status(400).console.log(err)
-    console.table(res);
-    start();
-  });
+  db.query(
+    `SELECT title, role.id AS role_id, department.name AS department, salary FROM role JOIN department ON role.department_id = department.id`,
+    (err, res) => {
+      if (err) {
+        return console.log(err);
+      }
+      console.table(res);
+      start();
+    }
+  );
 };
 
 //adds a role to the db
@@ -279,8 +280,6 @@ addRole = () => {
   // Creates a promise for querying the database for current departments
   const getDepartmentsFromDB = new Promise((resolve, reject) => {
     db.query(`SELECT name, id FROM department`, (err, res) => {
-      // if (err) return res.status(400).console.log(err)
-
       if (res) {
         resolve(res);
       } else {
@@ -330,8 +329,9 @@ addRole = () => {
             `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`,
             [response.roleName, response.roleSalary, thisDepartmentId],
             (err, res) => {
-              // if (err) return res.status(400).json(err);
-
+              if (err) {
+                  return console.log(err);
+              }
               console.log("Added " + response.roleName + " to the database");
 
               start();
@@ -344,7 +344,9 @@ addRole = () => {
 
 viewAllDepartments = () => {
   db.query(`SELECT * FROM department`, (err, res) => {
-    // if (err) return res.status(400).console.log(err)
+    if (err) {
+        return console.log(err);
+    }
     console.table(res);
     start();
   });
@@ -368,8 +370,10 @@ addDepartment = () => {
         `INSERT INTO department (name) VALUES (?)`,
         response.departmentName,
         (err, res) => {
-          // if (err) return res.status(400).console.log(err)
-          console.log("Added " + response.departmentName + " to the database");
+            if (err) {
+                return console.log(err);
+            }
+            console.log("Added " + response.departmentName + " to the database");
 
           // Calls start function
           start();
