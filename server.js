@@ -163,7 +163,7 @@ addEmployee = () => {
 
                 db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`, [response.firstName, response.lastName, thisRoleId, thisManagerId], (err, results) => {
                     if (err) return res.status(400).json(err);
-                })
+
 
                 console.log("Added " + response.firstName + " " + response.lastName + " to the database.")
 
